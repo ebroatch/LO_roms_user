@@ -17,38 +17,52 @@
 #define UV_QDRAG
 
 #define DJ_GRADPS
-#define TS_DIF2
-#define  MIX_GEO_TS
 #define SALINITY
 #define SOLVE3D
-
-#undef AVERAGES
-#undef DIAGNOSTICS_TS
-#undef DIAGNOSTICS_UV
 
 /* LiveOcean specific choices */
 #define NONLIN_EOS
 #define MASKING
 #define SPHERICAL
-/* undef atm forcing for analytical run */
-#undef SOLAR_SOURCE
-#undef BULK_FLUXES
-#undef LONGWAVE_OUT
-/*  */
+
+#undef USE_ATM
+#ifdef USE_ATM
+#  define SOLAR_SOURCE
+#  define BULK_FLUXES
+#  define LONGWAVE_OUT
+#  define EMINUSP
+#else
+#  define ANA_SMFLUX
+#  define ANA_STFLUX
+#  define ANA_SSFLUX
+#endif
+
 #define DEFLATE
 #define HDF5
+
 #define RADIATION_2D
-#undef RAMP_TIDES
 #define SSH_TIDES
 #define UV_TIDES
 #define ADD_FSOBC
 #define ADD_M2OBC
 
-#define ANA_SMFLUX
-#define ANA_STFLUX
-#define ANA_SSFLUX
 #define ANA_BTFLUX
 #define ANA_BSFLUX
+
+/* LiveOcean bio choices */
+#undef BIO_FENNEL
+#ifdef BIO_FENNEL
+#  define BIO_SEDIMENT
+#  define DENITRIFICATION
+#  undef RIVER_DON
+#  define OXYGEN
+#  define CARBON
+#  define pCO2_RZ
+#  define PCO2AIR_SECULAR
+#  define TALK_NONCONSERV
+#  define ANA_SPFLUX
+#  define ANA_BPFLUX
+#endif
 
 #define GLS_MIXING
 #if defined GLS_MIXING
@@ -57,30 +71,11 @@
 # define RI_SPLINES
 #endif
 
-#if defined BIO_FENNEL  || defined ECOSIM || \
-    defined NPZD_POWELL || defined NEMURO
-# define ANA_BIOLOGY
-# define ANA_SPFLUX
-# define ANA_BPFLUX
-# define ANA_SRFLUX
-#endif
-
-#if defined NEMURO
-# define HOLLING_GRAZING
-# undef  IVLEV_EXPLICIT
-#endif
-
-#ifdef BIO_FENNEL
-# define CARBON
-# define DENITRIFICATION
-# define BIO_SEDIMENT
-# define DIAGNOSTICS_BIO
-#endif
-
+#define PERFECT_RESTART
 #ifdef PERFECT_RESTART
 # undef  AVERAGES
 # undef  DIAGNOSTICS_BIO
 # undef  DIAGNOSTICS_TS
 # undef  DIAGNOSTICS_UV
-# define OUT_DOUBLE
+# undef  OUT_DOUBLE
 #endif
